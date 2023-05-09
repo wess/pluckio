@@ -1,6 +1,5 @@
 import React, {Suspense} from 'react';
 import {useRoutes} from 'react-router-dom';
-import routes from '~react-pages';
 
 import {
   ChakraProvider,
@@ -25,6 +24,8 @@ export const cssFixes = css`
 
 import './index.scss';
 
+import Router from '../router';
+
 const App = () => {
   return (
     <Suspense fallback={<p>Loading...</p>}>
@@ -33,7 +34,7 @@ const App = () => {
         <Global styles={cssFixes}/>
         <Provider>
           <Layout>
-            {useRoutes(routes)}
+            <Router/>
           </Layout>
         </Provider>
       </ChakraProvider>

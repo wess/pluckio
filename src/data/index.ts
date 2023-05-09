@@ -1,5 +1,6 @@
 
 export type {default as Settings} from './settings';
+export type {default as Session} from './session';
 
 import Locale from '../locale';
 
