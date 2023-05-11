@@ -31,6 +31,16 @@ const Dialog = ({title, body, cancel, confirm, presenter, ..._props}:Props) => {
 
   let Btn = presenter.type;
 
+  const cancelAction = () => {
+    cancel.action();
+    onClose();
+  }
+
+  const confirmAction = () => {
+    confirm.action();
+    onClose();
+  }
+
   return (
     <>
     <Btn {...presenter.props} onClick={onOpen}/>
@@ -51,11 +61,11 @@ const Dialog = ({title, body, cancel, confirm, presenter, ..._props}:Props) => {
           </AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
-              Cancel
+            <Button ref={cancelRef} onClick={cancelAction}>
+              {cancel.caption}
             </Button>
-            <Button colorScheme='red' onClick={onClose} ml={3}>
-              Delete
+            <Button colorScheme={confirm.colorScheme ?? 'red'} onClick={confirmAction} ml={3}>
+              {confirm.caption}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
