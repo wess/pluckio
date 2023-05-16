@@ -7,7 +7,6 @@ import {
   Box,
   Button,
   Divider,
-  Link,
   Center,
   Alert,
   AlertIcon,

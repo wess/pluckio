@@ -19,7 +19,7 @@ export type DialogAction = {
 
 interface Props extends Object {
   title:string;
-  body:string; 
+  body:string|React.ReactElement; 
   cancel:DialogAction;
   confirm:DialogAction;
   presenter:React.ReactElement;
@@ -30,6 +30,7 @@ const Dialog = ({title, body, cancel, confirm, presenter, ..._props}:Props) => {
   const cancelRef = React.useRef();
 
   let Btn = presenter.type;
+  let Bod = body;
 
   const cancelAction = () => {
     cancel.action();
@@ -57,7 +58,7 @@ const Dialog = ({title, body, cancel, confirm, presenter, ..._props}:Props) => {
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            {body}
+            {Bod}
           </AlertDialogBody>
 
           <AlertDialogFooter>
