@@ -24,7 +24,7 @@ const Layout = (props) => {
   React.useEffect(() => {
     setTimeout(() => {
       setFlash(null);
-    }, 2000);
+    }, 1000);
   }, [flash, setFlash]);
 
   return (
