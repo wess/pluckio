@@ -50,6 +50,8 @@ export const FlashProvider = ({children}) => {
   );
 }
 
+export const Flash = messages;
+
 export const useFlash = () => React.useContext(Context);
 
 export default messages;

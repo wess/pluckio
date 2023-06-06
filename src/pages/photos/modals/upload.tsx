@@ -5,22 +5,45 @@ import {
   TextField
 } from '../../../components';
 
+import {
+  useStorage,
+  useFlash
+} from '../../../hooks';
+
+import { 
+  Flash 
+} from '../../../providers';
 
 const UploadModal = ({button}) => {
+  const {upload} = useStorage();
+  const {setFlash} = useFlash();
+
+  const [value, setValue] = React.useState('');
   const inputRef = React.useRef();
 
   const cancel = {
     caption: "Cancel",
     action: () => {
-      console.log("upload canceled");
+      setValue('');
     },
   }
 
   const confirm = {
     caption: "Submit",
     colorScheme: "green",
-    action: () => {
-      console.log("upload submit");
+    action: async () => {
+      if (typeof inputRef.current === 'undefined') { return; }
+
+      const file = inputRef.current!.files[0];
+
+      try {
+        const _id = await upload(file);
+      } catch (error) {
+        console.error(error);
+        
+        setFlash(Flash.error(error.message));
+
+      }
     },
   }
 
@@ -31,8 +54,7 @@ const UploadModal = ({button}) => {
     
     inputRef.current!.click();
   }
-
-  const [value, setValue] = React.useState('');
+  
   return (
     <Dialog
       title="Upload Photo"
@@ -46,7 +68,7 @@ const UploadModal = ({button}) => {
             name={name} 
             ref={inputRef} 
             style={{ display: 'none' }}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value.split('\\').pop())}
           >
 
           </input>

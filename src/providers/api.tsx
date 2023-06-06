@@ -4,7 +4,7 @@ import {
   Client, 
   Account,
   Databases,
-  Storage
+  Storage,
 } from 'appwrite';
 
 const PROJECT_ID = 'pluck';
