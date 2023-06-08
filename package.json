@@ -23,6 +23,7 @@
     "@vitejs/plugin-react": "^2.2.0",
     "appwrite": "^10.1.0",
     "appwrite-cli": "^1.1.1",
+    "appwrite-models": "^0.0.2",
     "dayjs": "^1.11.6",
     "formik": "^2.2.9",
     "framer-motion": "^6",

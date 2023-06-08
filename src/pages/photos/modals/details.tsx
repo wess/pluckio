@@ -21,15 +21,25 @@ import {
   IoShare
 } from 'react-icons/io5';
 
+import {
+  useApi
+} from '../../../hooks';
+
+const BUCKET_ID = 'photos';
 
 const DetailModal = ({photo}) => {
+  const api = useApi();
+
   const {isOpen, onOpen, onClose} = useDisclosure();
+
+  const preview = api.storage.getFilePreview(BUCKET_ID, photo['$id']);
+  const view = api.storage.getFileView(BUCKET_ID, photo['$id']);
 
   return (
     <>
     <LinkOverlay as={Image}
       objectFit='cover'
-      src={photo}
+      src={preview.href}
       alt='photo'
       onClick={onOpen} 
       cursor='pointer'
@@ -44,7 +54,7 @@ const DetailModal = ({photo}) => {
           <Image 
             w='100%'
             h='100%'
-            src={photo}
+            src={view.href}
             alt='photo' 
             objectFit='fill'
           />

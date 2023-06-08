@@ -12,25 +12,34 @@ import {
 import Landing from './landing';
 import User from './user';
 
+import {Flash} from '../../providers';
+
 import {
   useSession,
   useFlash
 } from '../../hooks';
 
 const Layout = (props) => {
+  const flashRef = React.useRef(null);
   const {session} = useSession();
-  const {flash, setFlash} = useFlash();
+  const {flash, setFlash, deleteFlash} = useFlash();
+
+    deleteFlash();  
+
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setFlash(null);
-    }, 1000);
-  }, [flash, setFlash]);
+  }, [
+    flashRef,
+    flash, 
+    setFlash, 
+    deleteFlash, 
+  ]);
 
   return (
     <>
     {flash && (
       <Alert 
+          ref={flashRef}
           position="fixed"
           top={0}
           right={0}

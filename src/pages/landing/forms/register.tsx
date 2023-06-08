@@ -52,7 +52,7 @@ const Register = ({onLogin, ...props}) => {
   const navigate = useNavigate();
   const api = useApi();
   const {setFlash} = useFlash();
-  const [error, setrError] = React.useState(null);
+  const [error, setError] = React.useState(null);
 
   const onSubmit = async (values, actions) => {
     actions.setSubmitting(true);
@@ -68,7 +68,7 @@ const Register = ({onLogin, ...props}) => {
 
       navigate('/');
     } catch(e) {
-      setrError(e.message);
+      setError(e.message);
     }
   };
 

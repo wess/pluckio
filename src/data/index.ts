@@ -1,4 +1,5 @@
 
+export {default as Cache} from './cache';
 export type {default as Settings} from './settings';
 export type {default as Session} from './session';
 

@@ -3,16 +3,16 @@ import React from 'react';
 import {
   Dialog,
   TextField
-} from '../../../components';
+} from '../../../../components';
 
 import {
   useStorage,
   useFlash
-} from '../../../hooks';
+} from '../../../../hooks';
 
 import { 
   Flash 
-} from '../../../providers';
+} from '../../../../providers';
 
 const UploadModal = ({button}) => {
   const {upload} = useStorage();
@@ -33,6 +33,8 @@ const UploadModal = ({button}) => {
     colorScheme: "green",
     action: async () => {
       if (typeof inputRef.current === 'undefined') { return; }
+
+      if(inputRef.current == null) { return; }
 
       const file = inputRef.current!.files[0];
 

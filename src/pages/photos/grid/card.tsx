@@ -24,6 +24,8 @@ import {
   DetailsModal
 } from '../modals';
 
+const BUCKET_ID = 'photos';
+
 const PhotoCard = ({photo, index}) => (
   <LinkBox as={WrapItem} key={`photo-${index}`}>
     <Card maxW='md'>

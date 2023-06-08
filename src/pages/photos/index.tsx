@@ -17,13 +17,11 @@ const Photos = () => {
   const [photos, setPhotos] = React.useState(null);
 
   const listPhotos = async () => {
-    console.log("listPhotos");
-    
     try {
       const list:Models.FileList = await api.storage.listFiles(BUCKET_ID)
 
       setPhotos(
-        list.files.map((file) => file.name)
+        list.files
       );
     } catch(_e) {
       setPhotos([]);

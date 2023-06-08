@@ -2,24 +2,8 @@ import React from 'react';
 
 import {
   Wrap,
-  WrapItem,
   Box,
-  Card,
-  CardHeader,
-  CardFooter,
-  Flex,
-  IconButton,
-  Button,
-  Text,
-  Avatar,
-  LinkBox,
 } from '@chakra-ui/react';
-
-import {
-  IoEllipsisVertical,
-  IoThumbsUp,
-  IoShare
-} from 'react-icons/io5';
 
 import {
   Empty,

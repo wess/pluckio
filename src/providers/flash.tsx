@@ -1,5 +1,5 @@
 import React from 'react';
-import Data from '../data';
+import {Cache} from '../data';
 
 export enum FlashType {
   Success = 'success',
@@ -27,30 +27,34 @@ const messages = {
 
 const Context = React.createContext({
   flash: null,
-  setFlash:(message:FlashMessage) => {}
+  setFlash:(message:FlashMessage) => {},
+  deleteFlash:() => {},
 });
 
 export const FlashProvider = ({children}) => {
-  const [flash, setFlash_] = React.useState<FlashMessage | null>(Data.get('pending.flash'));
+  const [flash, setFlash_] = React.useState<FlashMessage | null>(Cache.get('pending.flash'));
 
   const setFlash = (message: FlashMessage | null) => {
     if(message == null || message.message.length === 0) {
-      Data.delete('pending.flash');
+      Cache.delete('pending.flash');
     } else {
-      Data.set('pending.flash', message);
+      Cache.set('pending.flash', message);
     }
 
     setFlash_(message);
   };
 
+  const deleteFlash = () => {
+    Cache.delete('pending.flash');
+    setFlash_(null);
+  }
+
   return (
-    <Context.Provider value={{flash, setFlash}}>
+    <Context.Provider value={{flash, setFlash, deleteFlash}}>
       {children}
     </Context.Provider>
   );
 }
-
-export const Flash = messages;
 
 export const useFlash = () => React.useContext(Context);
 
