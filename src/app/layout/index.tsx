@@ -24,16 +24,6 @@ const Layout = (props) => {
   const {session} = useSession();
   const {flash, setFlash, deleteFlash} = useFlash();
 
-    deleteFlash();  
-
-
-  React.useEffect(() => {
-  }, [
-    flashRef,
-    flash, 
-    setFlash, 
-    deleteFlash, 
-  ]);
 
   return (
     <>

@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   ID,
+  Models,
   Account,
   Storage,
 } from 'appwrite';
@@ -13,24 +14,22 @@ import {
 const BUCKET_ID = 'photos';
 
 const Context = React.createContext({
-  upload: async (file:File) => '',
+  upload: null,
 });
 
 const Component = ({children}) => {
-  const {storage} = useApi();
+  const {account, storage} = useApi();
 
   const upload = async (file: File) => {
-    console.log("FILE: ", file);
-
     const response = await storage.createFile(
       BUCKET_ID,
       ID.unique(),
       file
     );
     
-    console.log('response');
+    console.log('response: ', response);
 
-    return response['$id'];
+    return response;
   }
   
   const client = {

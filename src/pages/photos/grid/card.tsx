@@ -1,6 +1,10 @@
 import React from 'react';
 
 import {
+  Models
+} from 'appwrite';
+
+import {
   WrapItem,
   Box,
   Card,
@@ -15,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 
 import {
-  IoEllipsisVertical,
+  IoTrash,
   IoThumbsUp,
   IoShare
 } from 'react-icons/io5';
@@ -24,29 +28,53 @@ import {
   DetailsModal
 } from '../modals';
 
+import {
+  useApi
+} from '../../../hooks';
+
 const BUCKET_ID = 'photos';
 
-const PhotoCard = ({photo, index}) => (
-  <LinkBox as={WrapItem} key={`photo-${index}`}>
-    <Card maxW='md'>
-      <CardHeader>
-        <Flex>
-          <Flex flex='1' gap='6' alignItems='center' flexWrap='wrap'>
-            <Avatar name='Wess Cope' src='http://placekitten/g/100/100' />
+const PhotoCard = ({photo, photoState, index}) => {
+  const {storage} = useApi();
+  const [_, setPhotos] = photoState;
 
-            <Box>
-              <Text>Wess Cope</Text>
-            </Box>
-          </Flex>
-          <IconButton
-            variant='ghost'
-            colorScheme='gray'
-            aria-label='See menu'
-            icon={<IoEllipsisVertical />}
-          />
-        </Flex>
-      </CardHeader>
+  const deleteImage = async () => {
+    try {
+      await storage.deleteFile(BUCKET_ID, photo['$id']);
+
+      const list:Models.FileList = await storage.listFiles(BUCKET_ID);
+
+      setPhotos(
+        list.files
+      );
       
+    } catch(e) {
+      console.error("delete File error: ", e.message);
+    }
+  }
+
+  return (
+    <LinkBox as={WrapItem} key={`photo-${index}`}>
+      <Card maxW='sm'>
+        <CardHeader>
+          <Flex>
+            <Flex flex='1' gap='6' alignItems='center' flexWrap='wrap'>
+              <Avatar name='Wess Cope' src='' />
+
+              <Box>
+                <Text>Wess Cope</Text>
+              </Box>
+            </Flex>
+            <IconButton
+              variant='ghost'
+              colorScheme='gray'
+              aria-label='See menu'
+              icon={<IoTrash />}
+              onClick={deleteImage}
+            />
+          </Flex>
+        </CardHeader>
+        
         <DetailsModal photo={photo}/>
 
         <CardFooter
@@ -67,7 +95,8 @@ const PhotoCard = ({photo, index}) => (
         </CardFooter>
       </Card>
     </LinkBox>
-);
+  );
+}
 
 
 export default PhotoCard;

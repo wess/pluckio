@@ -11,7 +11,9 @@ import {
 
 import PhotoCard from './card';
 
-const PhotosGrid = ({photos}) => {
+const PhotosGrid = ({photoState}) => {
+  const [photos] = photoState;
+
   if(photos === null || photos.length === 0) return (
     <Empty 
       title="No Photos"
@@ -23,7 +25,7 @@ const PhotosGrid = ({photos}) => {
   return (
     <Box flex={1} w='full'>
       <Wrap px={6}>
-        {photos.map((photo, index) => (<PhotoCard photo={photo} index={index} />))}
+        {photos.map((photo, index) => (<PhotoCard key={`photo-${index}`} photoState={photoState} photo={photo} index={index} />))}
       </Wrap>
     </Box>
   );

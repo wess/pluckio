@@ -50,13 +50,13 @@ const DetailModal = ({photo}) => {
       <ModalContent>
         <ModalHeader>Photo think</ModalHeader>
         <ModalCloseButton />
-        <ModalBody bg='red' minH='500px'>
+        <ModalBody minH='500px'>
           <Image 
             w='100%'
             h='100%'
             src={view.href}
             alt='photo' 
-            objectFit='fill'
+            objectFit='cover'
           />
         </ModalBody>
 

@@ -1,23 +1,23 @@
 import React from 'react';
 
 import {
+  Models
+} from 'appwrite';
+
+import {
   Dialog,
   TextField
 } from '../../../../components';
 
 import {
   useStorage,
-  useFlash
+  useApi,
 } from '../../../../hooks';
 
-import { 
-  Flash 
-} from '../../../../providers';
-
-const UploadModal = ({button}) => {
+const UploadModal = ({photoState, button}) => {
   const {upload} = useStorage();
-  const {setFlash} = useFlash();
-
+  const {storage} = useApi();
+  const [_, setPhotos] = photoState;
   const [value, setValue] = React.useState('');
   const inputRef = React.useRef();
 
@@ -39,11 +39,17 @@ const UploadModal = ({button}) => {
       const file = inputRef.current!.files[0];
 
       try {
-        const _id = await upload(file);
+        await upload(file);
+
+        const list:Models.FileList = await storage.listFiles('photos');
+
+        setPhotos(
+          list.files
+        );
+  
+        
       } catch (error) {
         console.error(error);
-        
-        setFlash(Flash.error(error.message));
 
       }
     },

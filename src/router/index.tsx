@@ -19,6 +19,9 @@ export {default as UserRouter} from './user';
 const Router = () => {
   const {session} = useSession();
 
+  console.log('session: ', session);
+  
+
   const Destination = 
     session == null
     ? Landing

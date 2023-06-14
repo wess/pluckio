@@ -1,4 +1,5 @@
 import React from 'react';
+import {useNavigate} from 'react-router';
 
 import {
   HStack,
@@ -19,7 +20,20 @@ import {
   IoLogOutOutline,
 } from 'react-icons/io5';
 
+import {
+  useSession
+} from '../../../../hooks';
+
 const UserComponent = () => {
+  const navigate = useNavigate();
+  const {setSession} = useSession();
+
+  const logOut = async () => {
+    await setSession(null);
+
+    navigate('/');
+  }
+
   return (
     <HStack w="full" px={2} py={2}>
       <Avatar size="sm" />
@@ -30,11 +44,9 @@ const UserComponent = () => {
         <IoSettingsOutline size="22px" />
       </Link>
 
-      <form action='/auth/logout' method='post'>
-      <Button type="submit" className="user-menu" variant='ghost'>
+      <Button onClick={logOut} className="user-menu" variant='ghost'>
         <IoLogOutOutline size="22px" />
       </Button>
-      </form>
     </HStack>
   );
 }

@@ -12,13 +12,14 @@ import { useApi } from '../../hooks';
 const BUCKET_ID = 'photos';
 
 const Photos = () => {
-  const api = useApi();
+  const {storage} = useApi();
 
-  const [photos, setPhotos] = React.useState(null);
+  const photoState = React.useState(null);
+  const [photos, setPhotos] = photoState;
 
   const listPhotos = async () => {
     try {
-      const list:Models.FileList = await api.storage.listFiles(BUCKET_ID)
+      const list:Models.FileList = await storage.listFiles(BUCKET_ID);
 
       setPhotos(
         list.files
@@ -37,10 +38,10 @@ const Photos = () => {
 
   return (
     <>
-      <Toolbar />
+      <Toolbar photoState={photoState} />
 
       <VStack flex={1} w='100%' h='full' pt={4} align='flex-start' overflow='auto'>
-        <PhotosGrid photos={photos} />
+        <PhotosGrid photoState={photoState} />
       </VStack>
     </>
   );

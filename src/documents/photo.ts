@@ -6,6 +6,7 @@ interface Photo extends Document {
   userId: string;
   fileId: string;
   name: string;
+  isPrivate: boolean;
   description: string | null;
 }
 

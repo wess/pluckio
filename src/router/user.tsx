@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 
 import {
-  useSession
+  useSession,
+  useApi,
 } from '../hooks';
 
 import {
@@ -18,7 +19,7 @@ import {
 const Router = () => {
   const navigate = useNavigate();
   const {session} = useSession();
-
+  
   if(session == null) {
     navigate('/');
   }
