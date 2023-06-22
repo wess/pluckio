@@ -15,25 +15,27 @@ const BUCKET_ID = 'photos';
 
 const Context = React.createContext({
   upload: null,
+  get: null,
 });
 
 const Component = ({children}) => {
   const {account, storage} = useApi();
 
   const upload = async (file: File) => {
-    const response = await storage.createFile(
+    return await storage.createFile(
       BUCKET_ID,
       ID.unique(),
       file
     );
-    
-    console.log('response: ', response);
+ }
 
-    return response;
+  const get = async (id: string) => {
+    return await storage.getFile(BUCKET_ID, id);
   }
   
   const client = {
     upload,
+    get,
   };
 
   return (

@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Routes,
   Route,
+  useLocation,
 } from 'react-router-dom';
 
 import {
@@ -11,16 +12,14 @@ import {
 
 import {
   Landing,
-  User
+  User,
+  Public,
 } from '../pages';
 
 export {default as UserRouter} from './user';
 
 const Router = () => {
   const {session} = useSession();
-
-  console.log('session: ', session);
-  
 
   const Destination = 
     session == null
@@ -30,6 +29,7 @@ const Router = () => {
 
   return (
     <Routes>
+      <Route path="/public/*" element={<Public />} />
       <Route path="/*" element={<Destination />} />
     </Routes>
   );

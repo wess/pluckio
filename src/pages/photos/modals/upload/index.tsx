@@ -1,45 +1,108 @@
 import React from 'react';
 
 import {
+  VStack,
+  Box,
+  Text,
+} from '@chakra-ui/react';
+
+import {
   Models
 } from 'appwrite';
 
 import {
+  object,
+  string
+} from 'yup';
+
+import {
   Dialog,
-  TextField
+  TextField,
 } from '../../../../components';
 
 import {
+  useSession,
   useStorage,
+  useDocuments,
   useApi,
 } from '../../../../hooks';
 
+import {
+  Photo
+} from '../../../../documents';
+
+const validation = object().shape({
+  name: string().required('Name is required'),
+  description: string().optional(),
+});
+
+const UploadField = (props) => (
+  <Box w="100%">
+    <TextField
+      {...props}
+      />
+      {props['error'] && (
+        <Box p={2} w='full'>
+          <Text textAlign='end' textColor='red.500'>{props['error']}</Text>
+        </Box>
+      )}
+  </Box>
+);
+
 const UploadModal = ({photoState, button}) => {
+  const {session} = useSession();
+  
   const {upload} = useStorage();
   const {storage} = useApi();
+  const {photo} = useDocuments();
   const [_, setPhotos] = photoState;
-  const [value, setValue] = React.useState('');
   const inputRef = React.useRef();
+  const [values, setValues] = React.useState({});
+  const [errors, setErrors] = React.useState({});
 
   const cancel = {
     caption: "Cancel",
     action: () => {
-      setValue('');
+      console.log("cancel");
+      
+      setValues({});
     },
   }
 
   const confirm = {
     caption: "Submit",
     colorScheme: "green",
-    action: async () => {
-      if (typeof inputRef.current === 'undefined') { return; }
+    action: async (a) => {
+      let errors = {};
 
-      if(inputRef.current == null) { return; }
+      console.log("values: ", values);
+
+      try {
+        await validation.validate(values, {abortEarly: false});
+      } catch(e) {
+        e.inner.forEach((error) => {
+          errors[error.path] = error.message;
+        });
+      }
+
+      console.log(errors);
 
       const file = inputRef.current!.files[0];
 
       try {
-        await upload(file);
+        const {$id} = await upload(file);
+        const {userId} = session;
+
+        const document:Photo = {
+          userId: userId,
+          fileId: $id,
+          name: values['name'],
+          description: values['description'] || '',
+          isPrivate: false,
+        };
+
+        const docResult = await photo.create(document);
+        console.log(docResult);
 
         const list:Models.FileList = await storage.listFiles('photos');
 
@@ -49,7 +112,7 @@ const UploadModal = ({photoState, button}) => {
   
         
       } catch (error) {
-        console.error(error);
+        console.log(error);
 
       }
     },
@@ -70,24 +133,63 @@ const UploadModal = ({photoState, button}) => {
       cancel={cancel}
       confirm={confirm}
       body={
-        <>
-          <input 
-            type='file' 
-            name={name} 
-            ref={inputRef} 
-            style={{ display: 'none' }}
-            onChange={(e) => setValue(e.target.value.split('\\').pop())}
-          >
+        <VStack spacing={4}>
+          <Box w='full'>
+            <input 
+              type='file' 
+              name={name} 
+              ref={inputRef} 
+              style={{ display: 'none' }}
+              defaultValue=''
+              onChange={(e) => 
+                  setValues({
+                    ...values, 
+                    "upload-photo": e.target.value.split('\\').pop()
+                  })}
+            >
 
-          </input>
-          <TextField
-            id="upload-photo"
-            label="Upload Photo"
-            onClick={onClick}
-            value={value}
-            editable={false}
+            </input>
+          </Box>
+
+          <Box w='full'>
+            <TextField
+              id="upload-photo"
+              placeholder="Upload Photo"
+              onClick={onClick}
+              onChange={() => {}}
+              defaultValue={values['upload-photo'] || ''}
+              value={values['upload-photo'] || ''}
+              editable="false"
+            />
+
+            { errors['upload-photo'] && (
+                <Box p={2} w='full'>
+                  <Text textAlign='end' textColor='red.500'></Text>
+                </Box>
+              )
+            }
+
+          </Box>
+
+          <TextField 
+            id='name'
+            name='name' 
+            placeholder='Name' 
+            value={values['name'] || ''}
+            onChange={(e) => setValues({...values, name: e.target.value})}
+            error={errors['name']}
           />
-        </>
+
+          <UploadField 
+            id='description'
+            name='description' 
+            placeholder='Description' 
+            value={values['description'] || ''}
+            error={errors['description']}
+            onChange={(e) => setValues({...values, description: e.target.value})}
+          />
+
+        </VStack>
     }
     />
   );

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import {
-  Models
+  Models,
+  Query,
 } from 'appwrite';
 
 import {
@@ -20,8 +21,8 @@ import {
 
 import {
   IoTrash,
-  IoThumbsUp,
-  IoShare
+  IoShare,
+  IoHeart,
 } from 'react-icons/io5';
 
 import {
@@ -29,14 +30,18 @@ import {
 } from '../modals';
 
 import {
-  useApi
+  useDocuments,
+  useApi,
 } from '../../../hooks';
 
 const BUCKET_ID = 'photos';
 
 const PhotoCard = ({photo, photoState, index}) => {
+  const doc = useDocuments();
   const {storage} = useApi();
   const [_, setPhotos] = photoState;
+  const [metaData, setMetaData] = React.useState({});
+  const [likes, setLikes] = React.useState({});
 
   const deleteImage = async () => {
     try {
@@ -53,6 +58,38 @@ const PhotoCard = ({photo, photoState, index}) => {
     }
   }
 
+  const loadMeta = async (fileId) => {
+    try {
+      const result = await doc.photo.find([
+        Query.equal('fileId', fileId)
+      ]);
+  
+      setMetaData(result[0]);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const loadLikes = async (fileId) => {
+    try {
+      const result = await doc.like.find([
+        Query.equal('fileId', fileId)
+      ]);
+  
+      setLikes(result);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  React.useEffect(() => {
+    const {$id} = photo;
+    
+    loadMeta($id);
+    loadLikes($id);
+
+  }, [photo]);
+
   return (
     <LinkBox as={WrapItem} key={`photo-${index}`}>
       <Card maxW='sm'>
@@ -62,7 +99,7 @@ const PhotoCard = ({photo, photoState, index}) => {
               <Avatar name='Wess Cope' src='' />
 
               <Box>
-                <Text>Wess Cope</Text>
+                <Text>{metaData['name']}</Text>
               </Box>
             </Flex>
             <IconButton
@@ -86,8 +123,9 @@ const PhotoCard = ({photo, photoState, index}) => {
             },
           }}
         >
-          <Button flex='1' variant='ghost' leftIcon={<IoThumbsUp />}>
-            Like
+          <Button flex='1' variant='ghost' leftIcon={<IoHeart />}>
+            Likes
+            : {Object.keys(likes).length}
           </Button>
           <Button flex='1' variant='ghost' leftIcon={<IoShare />}>
             Share

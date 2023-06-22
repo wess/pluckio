@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router';
 
 import {
   Box,
@@ -11,6 +12,7 @@ import {
 
 import Landing from './landing';
 import User from './user';
+import {Public} from '../../pages';
 
 import {Flash} from '../../providers';
 
@@ -24,7 +26,8 @@ const Layout = (props) => {
   const {session} = useSession();
   const {flash, setFlash, deleteFlash} = useFlash();
 
-
+  const location = useLocation();
+  
   return (
     <>
     {flash && (
@@ -60,8 +63,11 @@ const Layout = (props) => {
       )}
 
 
-      {session == null
+      {
+        session == null
         ? <Landing {...props}/>
+        : location.pathname.toLowerCase().includes('public')
+        ? props['children']
         : <User {...props}/>
       }
     </>
