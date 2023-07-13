@@ -4,4 +4,5 @@ export {useApi} from './providers/api';
 export {useStorage} from './providers/storage';
 export {useDocuments} from './providers/documents';
 export {useSession} from './providers/session';
+export {useAccount} from './providers/account';
 export {useForm} from './providers/form';

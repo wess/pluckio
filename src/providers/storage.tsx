@@ -16,12 +16,14 @@ const BUCKET_ID = 'photos';
 const handlers = {
   upload: null,
   get: null,
+  preview: null,
+  view: null,
 };
 
 const Context = React.createContext(handlers);
 
 const Component = ({children}) => {
-  const {account, storage} = useApi();
+  const {storage} = useApi();
 
   const upload = async (file: File) => {
     return await storage.createFile(
@@ -30,14 +32,23 @@ const Component = ({children}) => {
       file
     );
  }
-
   const get = async (id: string) => {
     return await storage.getFile(BUCKET_ID, id);
+  }
+
+  const preview = async (id: string) => {
+    return await storage.getFilePreview(BUCKET_ID, id);
+  }
+
+  const view = async (id: string) => {
+    return await storage.getFileView(BUCKET_ID, id);
   }
   
   const client = {
     upload,
     get,
+    preview,
+    view,
   };
 
   return (

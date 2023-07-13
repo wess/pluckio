@@ -1,8 +1,10 @@
 import React from 'react';
 
-import {
-  Query
-} from 'appwrite';
+import {Query} from 'appwrite';
+
+import { 
+  useParams,
+} from 'react-router';
 
 import {
   VStack,
@@ -18,33 +20,37 @@ import {
   useDocuments,
   useStorage,
 } from '../../hooks';
+import { Photo } from '../../documents';
 
-import { useLocation } from 'react-router';
 
 const Public = (_props) => {
-  const doc = useDocuments();
+  const {photo} = useDocuments();
   const storage = useStorage();
+  const {username, slug} = useParams();
+  const [post, setPost] = React.useState(null);
 
-  const {pathname} = useLocation();
+  const getPost = async () => {
+    try {
+      const docs = await photo.find([
+        Query.equal('username', username),
+        Query.equal('slug', slug),
+      ]);
 
-  const pathComponents = pathname.split('/');
-  const $id = pathComponents[pathComponents.length - 1];
+      const doc:Photo = docs[0];
+      const image = await storage.view(doc.fileId);
 
-  const loadPhoto = async (id) => {
-    const photo = await doc.photo.find([
-      Query.equal('fileId', id)
-    ]);
-
-    console.log(photo);
-
-    const file = await storage.get(id);
-
-    console.log(file);
+      setPost({
+        ...doc,
+        ...image,
+      });
+    } catch(e) {
+      console.error(e);
+    }
   };
 
   React.useEffect(() => {
-    loadPhoto($id);
-  }, [$id]);
+    getPost();
+  }, []);
 
   return (
     <VStack w='full' h='full'>

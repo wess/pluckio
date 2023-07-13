@@ -29,7 +29,11 @@ const Router = () => {
 
   return (
     <Routes>
-      <Route path="/public/*" element={<Public />} />
+      <Route 
+        path="/user/:username/:slug"
+        element={<Public />} 
+      />
+
       <Route path="/*" element={<Destination />} />
     </Routes>
   );

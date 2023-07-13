@@ -25,6 +25,7 @@ import {
   useStorage,
   useDocuments,
   useApi,
+  useAccount,
 } from '../../../../hooks';
 
 import {
@@ -51,7 +52,7 @@ const UploadField = (props) => (
 
 const UploadModal = ({photoState, button}) => {
   const {session} = useSession();
-  
+  const account = useAccount();
   const {upload} = useStorage();
   const {storage} = useApi();
   const {photo} = useDocuments();
@@ -75,8 +76,6 @@ const UploadModal = ({photoState, button}) => {
     action: async (a) => {
       let errors = {};
 
-      console.log("values: ", values);
-
       try {
         await validation.validate(values, {abortEarly: false});
       } catch(e) {
@@ -84,8 +83,6 @@ const UploadModal = ({photoState, button}) => {
           errors[error.path] = error.message;
         });
       }
-
-      console.log(errors);
 
       const file = inputRef.current!.files[0];
 
@@ -97,23 +94,21 @@ const UploadModal = ({photoState, button}) => {
           userId: userId,
           fileId: $id,
           name: values['name'],
+          slug: values['name'].toLowerCase().replace(' ', '_'),
           description: values['description'] || '',
           isPrivate: false,
+          username: account.username.toLowerCase().replace(' ', '_'),
         };
 
         const docResult = await photo.create(document);
-        console.log(docResult);
-
         const list:Models.FileList = await storage.listFiles('photos');
 
         setPhotos(
           list.files
         );
-  
-        
+
       } catch (error) {
         console.log(error);
-
       }
     },
   }

@@ -24,7 +24,9 @@ import {
 const Layout = (props) => {
   const flashRef = React.useRef(null);
   const {session} = useSession();
-  const {flash, setFlash, deleteFlash} = useFlash();
+
+  const {flash, setFlash} = useFlash();
+
 
   const location = useLocation();
   
@@ -66,7 +68,7 @@ const Layout = (props) => {
       {
         session == null
         ? <Landing {...props}/>
-        : location.pathname.toLowerCase().includes('public')
+        : location.pathname.toLowerCase().includes('user')
         ? props['children']
         : <User {...props}/>
       }

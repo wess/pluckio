@@ -5,6 +5,7 @@ import ApiProvider from './api';
 import StorageProvider from './storage';
 import SessionProvider from './session';
 import DocumentsProvider from './documents';
+import AccountProvider from './account';
 
 import Flash, {FlashProvider} from './flash';
 
@@ -19,18 +20,18 @@ const Component = ({children}) => (
   <ApiProvider>
     <StorageProvider>
       <SessionProvider>
-        <DocumentsProvider>
-          <SettingsProvider>
-            <FlashProvider>
-              {children}
-            </FlashProvider>
-          </SettingsProvider>
-        </DocumentsProvider>
+        <AccountProvider>
+          <DocumentsProvider>
+            <SettingsProvider>
+              <FlashProvider>
+                {children}
+              </FlashProvider>
+            </SettingsProvider>
+          </DocumentsProvider>
+        </AccountProvider>
       </SessionProvider>
     </StorageProvider>
   </ApiProvider>
 );
-
-
 
 export default Component;
