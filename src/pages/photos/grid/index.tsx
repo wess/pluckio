@@ -25,7 +25,13 @@ const PhotosGrid = ({photoState}) => {
   return (
     <Box flex={1} w='full'>
       <Wrap px={6}>
-        {photos.map((photo, index) => (<PhotoCard key={`photo-${index}`} photoState={photoState} photo={photo} index={index} />))}
+        {
+          photos.map(
+            (photo, index) => (
+              <PhotoCard key={`photo-${index}`} photoState={photoState} photo={photo} index={index} />
+            )
+          )
+        }
       </Wrap>
     </Box>
   );

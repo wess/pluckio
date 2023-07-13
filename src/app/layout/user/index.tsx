@@ -11,7 +11,7 @@ import Nav from './nav';
 
 const Component = ({children}) => {
   return (
-    <HStack flex={1} h='100vh' align='flex-start' isInline spacing={0} background="#fff">
+    <HStack flex={1} h='100vh' align='flex-start' isInline spacing={0}>
       <Nav/>
       <VStack h='100%' align='flex-start' flex={1} p={0} m={0}>
 

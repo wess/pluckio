@@ -13,10 +13,12 @@ import {
 
 const BUCKET_ID = 'photos';
 
-const Context = React.createContext({
+const handlers = {
   upload: null,
   get: null,
-});
+};
+
+const Context = React.createContext(handlers);
 
 const Component = ({children}) => {
   const {account, storage} = useApi();

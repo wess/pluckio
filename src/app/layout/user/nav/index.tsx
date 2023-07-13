@@ -25,6 +25,8 @@ import {
 
 import Locale from '../../../../locale';
 
+import ThemeSwitcher from '../../../../theme';
+
 import list from './options';
 import Option from './option';
 import UserMenu from './user';
@@ -39,7 +41,8 @@ const Nav = () => {
         {
           settings.menuExpanded
           ? <HStack spacing={0} align="center" w="full" px={4} pt={3} pb={2}>
-              <Heading size="md">{Locale.branding}</Heading>
+              <Heading size="sm" flex={1}>{Locale.branding}</Heading>
+              <ThemeSwitcher />
             </HStack>  
           : <Box px={2} py={2}>
               <Avatar name={Locale.branding} size="sm"/>
@@ -66,7 +69,6 @@ const Nav = () => {
 
       <IconButton
         p={0}
-        bg='white'
         position="absolute"
         bottom={0}
         left={settings.menuExpanded ? "178px" : "50px"}

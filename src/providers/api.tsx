@@ -10,7 +10,6 @@ import {
 const PROJECT_ID = 'pluck';
 const ENDPOINT = 'https://cloud.appwrite.io/v1';
 
-
 const appwrite = new Client();
 
 appwrite.setEndpoint(ENDPOINT)

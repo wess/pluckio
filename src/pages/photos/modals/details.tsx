@@ -43,6 +43,7 @@ const DetailModal = ({photo}) => {
       alt='photo'
       onClick={onOpen} 
       cursor='pointer'
+      maxH='200px'
     />
 
     <Modal size='2xl' isOpen={isOpen} onClose={onClose}>

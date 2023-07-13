@@ -92,7 +92,7 @@ const PhotoCard = ({photo, photoState, index}) => {
 
   return (
     <LinkBox as={WrapItem} key={`photo-${index}`}>
-      <Card maxW='sm'>
+      <Card maxW='sm' p={4} m={1}>
         <CardHeader>
           <Flex>
             <Flex flex='1' gap='6' alignItems='center' flexWrap='wrap'>

@@ -34,7 +34,7 @@ const Photos = () => {
     if(photos !== null) return;
 
     listPhotos();
-  }, [photos, listPhotos]);
+  }, []);
 
   return (
     <>
