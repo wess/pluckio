@@ -97,7 +97,7 @@ const UploadModal = ({photoState, button}) => {
           slug: values['name'].toLowerCase().replace(' ', '_'),
           description: values['description'] || '',
           isPrivate: false,
-          username: account.username.toLowerCase().replace(' ', '_'),
+          username: (account['username'] ?? account['name'] ?? 'user').toLowerCase().replace(' ', '_'),
         };
 
         const docResult = await photo.create(document);

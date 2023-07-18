@@ -64,6 +64,8 @@ const PhotoCard = ({photo, photoState, index}) => {
         Query.equal('fileId', fileId)
       ]);
   
+      console.log("metaData: ", result);
+      
       setMetaData(result[0]);
     } catch(e) {
       console.log(e);

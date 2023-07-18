@@ -19,11 +19,14 @@ import {
 export {default as UserRouter} from './user';
 
 const Router = () => {
+  const location = useLocation();
   const {session} = useSession();
 
   const Destination = 
     session == null
-    ? Landing
+    ? location.pathname.toLowerCase().includes('user') 
+    ? Public
+    : Landing
     : User
     ;
 

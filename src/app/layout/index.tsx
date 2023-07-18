@@ -12,7 +12,7 @@ import {
 
 import Landing from './landing';
 import User from './user';
-import {Public} from '../../pages';
+import Public from './public';
 
 import {Flash} from '../../providers';
 
@@ -67,9 +67,9 @@ const Layout = (props) => {
 
       {
         session == null
-        ? <Landing {...props}/>
-        : location.pathname.toLowerCase().includes('user')
-        ? props['children']
+        ? location.pathname.toLowerCase().includes('user') 
+        ? <Public {...props}/> 
+        : <Landing {...props}/>
         : <User {...props}/>
       }
     </>

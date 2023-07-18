@@ -38,29 +38,50 @@ const Public = (_props) => {
 
       const doc:Photo = docs[0];
       const image = await storage.view(doc.fileId);
+      const result = {
+        doc,
+        image,
+      };
 
-      setPost({
-        ...doc,
-        ...image,
-      });
+      setPost(result);
     } catch(e) {
       console.error(e);
     }
   };
 
   React.useEffect(() => {
-    getPost();
-  }, []);
+    if(post == null){
+      getPost();
+    }
+
+
+  });
 
   return (
-    <VStack w='full' h='full'>
+    <VStack className='' as='main' w='100%' h='100vh' m={0} p={0}>
       <HStack w='full' p={4} bg='blackAlpha.200' borderBottom='1px solid rgba(0, 0, 0, 0.05)'>
-        <Heading size='md'>
-          Public facing
+        <Heading w='full' size='md'>
+          [pluck] {username} :: {post['doc']['name'] ?? slug}
         </Heading>
       </HStack>
+      
+      <Box flex={1} w='full'>
+          <Image 
+            w='100%'
+            h='100%'
+            src={post['image']['href'] ?? ''}
+            alt='photo' 
+            objectFit='cover'
+          />
+
+        </Box>
+
     </VStack>
   );
 }
 
 export default Public;
+
+
+
+
