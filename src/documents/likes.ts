@@ -4,7 +4,7 @@ import{
 
 interface Like extends Document {
   userId: string;
-  fileId: string;
+  photoId: string;
 }
 
 export default Like;

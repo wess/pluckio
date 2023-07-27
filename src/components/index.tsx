@@ -4,6 +4,6 @@ export {default as Switchfield} from './switchfield';
 export {default as Dialog} from './dialog';
 export {default as Empty} from './empty';
 export {default as PasswordField} from './password';
-export {default as TextField} from './text';
+export {default as TextField} from './textfield';
 export {default as DynamicField} from './dynamic';
 export {FieldError} from './error';

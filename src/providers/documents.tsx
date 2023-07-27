@@ -20,10 +20,12 @@ const CollectionId = {
   like: '649449a0d6570eac3dbd',
 }
 
-const Context = React.createContext({
+const collections = {
   photo:null,
   like:null,
-});
+};
+
+const Context = React.createContext(collections);
 
 const Component = ({children}) => {
   const {client} = useApi();

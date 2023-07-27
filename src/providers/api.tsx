@@ -8,7 +8,7 @@ import {
 } from 'appwrite';
 
 const PROJECT_ID = 'pluck';
-const ENDPOINT = 'http://143.198.187.150/v1';
+const ENDPOINT = 'https://cloud.appwrite.io/v1';
 
 const appwrite = new Client();
 

@@ -57,9 +57,10 @@ const UploadModal = ({photoState, button}) => {
   const {storage} = useApi();
   const {photo} = useDocuments();
   const [_, setPhotos] = photoState;
-  const inputRef = React.useRef();
   const [values, setValues] = React.useState({});
   const [errors, setErrors] = React.useState({});
+  
+  const inputRef = React.useRef<HTMLInputElement>();
 
   const cancel = {
     caption: "Cancel",
@@ -73,7 +74,7 @@ const UploadModal = ({photoState, button}) => {
   const confirm = {
     caption: "Submit",
     colorScheme: "green",
-    action: async (a) => {
+    action: async () => {
       let errors = {};
 
       try {
@@ -84,7 +85,16 @@ const UploadModal = ({photoState, button}) => {
         });
       }
 
-      const file = inputRef.current!.files[0];
+      const current = inputRef['current'];
+      if(typeof current === 'undefined') { 
+        return; 
+      }
+
+      if(current.files.length === 0) {
+        throw new Error('No file selected');
+      }
+
+      const file = current.files[0];
 
       try {
         const {$id} = await upload(file);
@@ -116,9 +126,11 @@ const UploadModal = ({photoState, button}) => {
   const name = "upload-photo";
 
   const onClick = () => {
-    if (typeof inputRef.current === 'undefined') { return; }
+    if(!inputRef.current) { return; }
     
-    inputRef.current!.click();
+    const current = inputRef.current;
+    
+    current.click();
   }
   
   return (

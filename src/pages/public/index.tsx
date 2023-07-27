@@ -17,17 +17,66 @@ import {
 } from '@chakra-ui/react';
 
 import {
+  IoThumbsUp,
+  IoShare
+} from 'react-icons/io5';
+
+import {
+  useAccount,
+  useApi,
   useDocuments,
+  useSession,
   useStorage,
 } from '../../hooks';
-import { Photo } from '../../documents';
+
+import { 
+  Photo,
+  Like,
+} from '../../documents';
 
 
 const Public = (_props) => {
-  const {photo} = useDocuments();
+  const api = useApi();
+  const account = useAccount();
+  const {photo, like} = useDocuments();
   const storage = useStorage();
   const {username, slug} = useParams();
+  const [session, setSession] = React.useState(null);
   const [post, setPost] = React.useState(null);
+  const [likes, setLikes] = React.useState(null);
+
+  const setupUser = async () => {
+    if(session != null) return;
+
+    if(account == null) {
+      const sessions = await (async () => {
+        try {
+          let result = await api.account.listSessions();
+          
+          return Object.keys(result).includes('sessions') ? result['sessions'] : [];
+        } catch(_e) {
+          return [];
+        }
+      })();
+
+      try {
+        
+        if(!sessions || sessions.length == 0) {
+          const sesh = await api.account.createAnonymousSession();
+
+          setSession(sesh);
+
+          return sesh['userId'];
+        } else {
+          setSession(sessions[0]);
+
+          return sessions[0]['userId'];
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    }
+  };  
 
   const getPost = async () => {
     try {
@@ -49,13 +98,74 @@ const Public = (_props) => {
     }
   };
 
+  const listLikes = async () => {
+    if(likes != null) return;
+
+    const userId = (session == null || Object.keys(session).length == 0) 
+      ? null
+      : session['userId'];
+
+    console.log('userId: ', userId);
+
+    const photoId = post['doc']['id'];
+
+    try {
+      const docs = await like.find([
+        Query.equal('userId', userId),
+        Query.equal('photoId', photoId),
+      ]);
+
+      setLikes(docs);
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  const likePost = async () => {
+    const userId = session['userId'];
+    const photoId = post['doc']['id'];
+
+    console.log(post);
+
+    const newLike:Like = {
+      userId,
+      photoId,
+    };
+
+    console.log(newLike);
+
+    try {
+      await like.create(newLike);
+
+      await listLikes();
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
   React.useEffect(() => {
+    if(session == null) {
+      setupUser();
+    }
+
     if(post == null){
       getPost();
     }
 
-
+    if(post && likes == null) {
+      listLikes();
+    }  
   });
+
+  if(post == null){
+    return (
+      <VStack className='' as='main' w='100%' h='100vh' m={0} p={0}>
+        <HStack w='full' h='full'>
+          <Text w='full' textAlign='center'>Loading...</Text>
+        </HStack>
+      </VStack>
+    );
+  }
 
   return (
     <VStack className='' as='main' w='100%' h='100vh' m={0} p={0}>
@@ -63,9 +173,27 @@ const Public = (_props) => {
         <Heading w='full' size='md'>
           [pluck] {username} :: {post['doc']['name'] ?? slug}
         </Heading>
+
+        <Box flex={1} />
+
+        <Text>
+          Likes: {(likes == null ? [] : likes).length}
+        </Text>
+
+        <Button 
+          variant='ghost' 
+          leftIcon={<IoThumbsUp />}
+          onClick={likePost}
+        >
+          Like
+        </Button>
+
+        <Button variant='ghost' leftIcon={<IoShare />}>
+          Share
+        </Button>
       </HStack>
       
-      <Box flex={1} w='full'>
+      <Box flex={1} w='full' p={20}>
           <Image 
             w='100%'
             h='100%'

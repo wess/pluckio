@@ -8,7 +8,7 @@ import {
 
 import {
   TextField
-} from './text';
+} from './textfield';
 
 export type DynamicFieldType = {
   caption: string,
