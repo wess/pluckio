@@ -1,40 +1,63 @@
-import React from 'react';
-import { Models } from 'appwrite';
+import React, {Suspense} from 'react';
+import { Models, Query } from 'appwrite';
 
 import {
+  Box,
   VStack,
 } from '@chakra-ui/react';
 
 import Toolbar from './toolbar';
 import PhotosGrid from './grid';
-import { useApi } from '../../hooks';
+import { 
+  useApi,
+  useAccount, 
+  useDocuments,
+} from '../../hooks';
 
 const BUCKET_ID = 'photos';
 
 const Photos = () => {
+  const account = useAccount();
+  const {photo} = useDocuments();
   const {storage} = useApi();
+
+  console.log(account);
 
   const photoState = React.useState(null);
   const [photos, setPhotos] = photoState;
 
   const listPhotos = async () => {
     try {
-      const list:Models.FileList = await storage.listFiles(BUCKET_ID);
+      const photoList = await photo.find([
+        Query.equal('userId', account['$id'])
+      ]);
+
+      const photoIds = photoList.map((photo) => {
+        return photo['fileId'];
+      });
+
+      const fileList:Models.FileList = await storage.listFiles(BUCKET_ID);
+
+      const list = fileList.files.filter((file) => {
+        return photoIds.includes(file['$id']);
+      });
 
       setPhotos(
-        list.files
+        list
       );
-    } catch(_e) {
+    } catch(e) {
+      console.error(e);
+      
       setPhotos([]);
     }
     
   };
 
   React.useEffect(() => {
-    if(photos !== null) return;
+    if(account === null || photos !== null) return;
 
     listPhotos();
-  }, []);
+  }, [account]);
 
   return (
     <>

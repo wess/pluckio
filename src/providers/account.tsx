@@ -22,8 +22,9 @@ const Component = ({children}) => {
       return;
     }
     
-    if(account == null)
+    if(account == null) {
       getAccount();
+    }
   });
 
   return (

@@ -3,6 +3,7 @@ import React from 'react';
 import {Query} from 'appwrite';
 
 import { 
+  useLocation,
   useParams,
 } from 'react-router';
 
@@ -21,11 +22,12 @@ import {
   IoShare
 } from 'react-icons/io5';
 
+import {useClipboard} from 'use-clipboard-copy';
+
 import {
   useAccount,
   useApi,
   useDocuments,
-  useSession,
   useStorage,
 } from '../../hooks';
 
@@ -44,6 +46,7 @@ const Public = (_props) => {
   const [session, setSession] = React.useState(null);
   const [post, setPost] = React.useState(null);
   const [likes, setLikes] = React.useState(null);
+  const clipboard = useClipboard();
 
   const setupUser = async () => {
     if(session != null) return;
@@ -105,13 +108,10 @@ const Public = (_props) => {
       ? null
       : session['userId'];
 
-    console.log('userId: ', userId);
-
     const photoId = post['doc']['id'];
 
     try {
       const docs = await like.find([
-        Query.equal('userId', userId),
         Query.equal('photoId', photoId),
       ]);
 
@@ -131,8 +131,6 @@ const Public = (_props) => {
       userId,
       photoId,
     };
-
-    console.log(newLike);
 
     try {
       await like.create(newLike);
@@ -188,21 +186,21 @@ const Public = (_props) => {
           Like
         </Button>
 
-        <Button variant='ghost' leftIcon={<IoShare />}>
+        <input type='hidden' ref={clipboard.target} value={window.location.origin + '/user/' + username + '/' + slug} />
+        <Button variant='ghost' leftIcon={<IoShare />} onClick={clipboard.copy}>
           Share
         </Button>
       </HStack>
       
       <Box flex={1} w='full' p={20}>
-          <Image 
-            w='100%'
-            h='100%'
-            src={post['image']['href'] ?? ''}
-            alt='photo' 
-            objectFit='cover'
-          />
-
-        </Box>
+        <Image 
+          w='100%'
+          h='100%'
+          src={post['image']['href'] ?? ''}
+          alt='photo' 
+          objectFit='cover'
+        />
+      </Box>
 
     </VStack>
   );

@@ -64,9 +64,9 @@ const PhotoCard = ({photo, photoState, index}) => {
         Query.equal('fileId', fileId)
       ]);
   
-      console.log("metaData: ", result);
-      
       setMetaData(result[0]);
+
+      await loadLikes(result[0]['id']);
     } catch(e) {
       console.log(e);
     }
@@ -75,7 +75,7 @@ const PhotoCard = ({photo, photoState, index}) => {
   const loadLikes = async (fileId) => {
     try {
       const result = await doc.like.find([
-        Query.equal('fileId', fileId)
+        Query.equal('photoId', fileId)
       ]);
   
       setLikes(result);
@@ -88,7 +88,6 @@ const PhotoCard = ({photo, photoState, index}) => {
     const {$id} = photo;
     
     loadMeta($id);
-    loadLikes($id);
 
   }, [photo]);
 
