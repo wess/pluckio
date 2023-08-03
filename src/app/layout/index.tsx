@@ -67,7 +67,7 @@ const Layout = (props) => {
 
       {
         session == null
-        ? location.pathname.toLowerCase().includes('user') 
+        ? location.pathname.toLowerCase().includes('user')
         ? <Public {...props}/> 
         : <Landing {...props}/>
         : <User {...props}/>

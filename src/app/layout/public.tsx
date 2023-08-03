@@ -5,7 +5,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 
-const Landing = ({children}) => (
+const Public = ({children}) => (
   <VStack
     as="main"
     w='full'
@@ -18,4 +18,4 @@ const Landing = ({children}) => (
   </VStack>
 );
 
-export default Landing;
+export default Public;

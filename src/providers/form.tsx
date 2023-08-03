@@ -2,14 +2,19 @@ import React from 'react';
 
 const Context = React.createContext({
   values: {},
-  setValues: (values) => {},
+  setValues: (values:{}) => {},
+  appendValues: (values:{}) => {},
 });
 
 const Provider = ({children}) => {
   const [values, setValues] = React.useState({});
 
+  const appendValues = (values) => ({
+    ...values,
+  });
+
   return (
-    <Context.Provider value={{values, setValues}}>
+    <Context.Provider value={{values, setValues, appendValues}}>
       {children}
     </Context.Provider>
   );

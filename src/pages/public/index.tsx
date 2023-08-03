@@ -3,7 +3,6 @@ import React from 'react';
 import {Query} from 'appwrite';
 
 import { 
-  useLocation,
   useParams,
 } from 'react-router';
 
